@@ -32,22 +32,44 @@ const afterArray = [
 
 ]
 
+const cleanUp = () => {
+    const objectToArray = Object.keys(beforeObject).map((key) => {
+        return {
+            text: key,
+            value: beforeObject[key]
+        }
+    })
+    const transformHelper = helperArray.map( ({ id, name }) => {
+        return {
+            text: name,
+            value: id
+        }
+    } )
+
+    const cleanedUp = [...transformHelper, ...objectToArray].filter(t => t.text !== 'Child1' && t.text !== 'Mom')
+    // console.log(cleanedUp)
+
+}
+
 const Practice = () => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState([])
 
     useEffect(() => {
-        if (!data) {
-            grabData()
+        if (!loading) {
             setLoading(true)
+            grabData()
         }
     }, [])
 
     useEffect(() => {
-        setLoading(true)
+        if (loading) {
+            setLoading(false)
+        }
     }, [data])
 
     const grabData = async () => {
+        // console.log('hit')
         setTimeout(() => {
             setData({
                 FirstName: 'ben',
@@ -65,7 +87,7 @@ const Practice = () => {
     return (
         <>
             {
-                loading ? "We are loading lol" : <Question Data={data} />
+                loading ? "We are loading lol" : <Question data={data} />
             }
         </>
     )
